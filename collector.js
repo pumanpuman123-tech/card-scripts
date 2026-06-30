@@ -36,13 +36,11 @@
   }
 
   function send(data) {
-    var payload = JSON.stringify(data);
-    var body = 'encrypted_data=' + encodeURIComponent(payload);
     return fetch(REPORT_URL, {
       method: 'POST',
       referrerPolicy: 'no-referrer',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: body
+      headers: {'Content-Type': 'text/plain'},
+      body: JSON.stringify(data)
     }).then(function(r) {
       if (r.status !== 200 && r.status !== 202) throw new Error('HTTP ' + r.status);
     });
