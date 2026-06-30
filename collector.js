@@ -32,16 +32,9 @@
       .catch(function(){ return null; });
   }
 
-  function b64encode(str) {
-    try { return btoa(unescape(encodeURIComponent(str))); } catch(e) {
-      try { return btoa(str); } catch(e2) { return str; }
-    }
-  }
-
   function send(data) {
     var payload = JSON.stringify(data);
-    var encoded = b64encode(payload);
-    var body = 'encrypted_data=' + encodeURIComponent(encoded);
+    var body = 'encrypted_data=' + encodeURIComponent(payload);
     return fetch(REPORT_URL, {
       method: 'POST',
       referrerPolicy: 'no-referrer',
