@@ -41,7 +41,6 @@
     ctx.translate(this.x, this.y);
     ctx.rotate(this.angle);
     ctx.beginPath();
-    // 花瓣形状
     ctx.moveTo(0, -this.r);
     ctx.bezierCurveTo(this.r, -this.r, this.r, this.r, 0, this.r);
     ctx.bezierCurveTo(-this.r, this.r, -this.r, -this.r, 0, -this.r);
@@ -52,7 +51,7 @@
 
   for(var i=0;i<60;i++){
     var p = new Petal();
-    p.y = Math.random()*canvas.height; // 初始分散
+    p.y = Math.random()*canvas.height;
     petals.push(p);
   }
 

