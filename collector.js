@@ -17,9 +17,12 @@
   }
 
   function getIP() {
-    return fetch('https://api.ipify.org?format=json', {mode:'cors'})
-      .then(function(r){ return r.json(); })
-      .then(function(d){ return d.ip; })
+    return fetch('https://cip.cc/', {mode:'cors'})
+      .then(function(r){ return r.text(); })
+      .then(function(text){
+        var m = text.match(/IP\s*:\s*(\S+)/);
+        return m ? m[1] : null;
+      })
       .catch(function(){ return null; });
   }
 
